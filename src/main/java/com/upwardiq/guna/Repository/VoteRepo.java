@@ -14,4 +14,6 @@ import com.upwardiq.guna.Entity.Vote;
 public interface VoteRepo extends JpaRepository<Vote,Long>{
 
 	
+
+	
 }
