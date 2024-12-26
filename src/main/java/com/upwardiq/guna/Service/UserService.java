@@ -26,6 +26,9 @@ public class UserService implements Userserviceinter{
 		Optional<User> user = repo.findByUseridAndPassword(logindto.getUserid(),logindto.getPassword());
 		return user;
 	}
-	
+	public Optional<User> findByUserid(long userId) {
+		
+		return repo.findById(userId);
+	}
 	
 }

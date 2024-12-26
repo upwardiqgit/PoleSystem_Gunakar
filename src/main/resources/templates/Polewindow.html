@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vote</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="topnav.css" th:href="@{/css/topnav.css}" />
+    <link rel="stylesheet" href="Sidenavbar.css" th:href="@{/css/Sidenavbar.css}" />
+    <style>
+        /* Custom CSS for Styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .vote-option {
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        .vote-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        #submitVote {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+        }
+        h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .footer p {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 1rem;
+        }
+        .top-navbar {
+            background-color: #007bff;
+            padding: 10px 20px;
+        }
+        .top-navbar a {
+            color: white;
+            text-decoration: none;
+            margin-right: 15px;
+            font-size: 1.1rem;
+        }
+        .top-navbar a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navbar -->
+    <div th:insert="TopNav.html::topnav"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Section -->
+            <div class="col-md-3">
+                <div th:insert="Sidenavbar.html::Sidenav"></div>
+            </div>
+
+            <!-- Right Content Section -->
+            <div class="col-md-9">
+                <h2>Vote for a Person</h2>
+                <form id="voteForm" class="border p-4 rounded" th:classappend="${hasVoted ? 'disabled' : ''}">
+                    <div th:each="vote : ${allvotes}" class="vote-option">
+                        <input type="radio" name="vote" th:id="'vote' + ${vote.id}" th:value="${vote.id}" th:disabled="${hasVoted}">
+                        <label th:for="'vote' + ${vote.id}" th:text="${vote.partname}"></label>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submitVote" th:disabled="${hasVoted}">Submit Vote</button>
+                </form>
+                <div class="footer">
+                    <p>Thank you for participating in the voting process!</p>
+                </div>
+            </div>    
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3 mt-4">
+        <p>&copy; 2024 Product Management System. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const voteForm = document.getElementById('voteForm');
+        const submitVoteButton = document.getElementById('submitVote');
+
+        // Enable submit button only when a vote is selected
+        voteForm.addEventListener('change', function () {
+            const selectedVote = document.querySelector('input[name="vote"]:checked');
+            submitVoteButton.disabled = !selectedVote;
+        });
+
+        // Handle form submission with Ajax
+        voteForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            const selectedVote = document.querySelector('input[name="vote"]:checked');
+            if (selectedVote) {
+                const voteId = selectedVote.value;
+
+                fetch('/submit-vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        voteId: voteId,
+                    }),
+                })
+                    .then((response) => response.text())
+                    .then((data) => {
+                        if (data === 'success') {
+                            alert('Thank you for your vote!');
+                            location.reload(); // Reload page to reflect changes
+                        } else if (data === 'alreadyVoted') {
+                            alert('You have already voted.');
+                        } else {
+                            alert('There was an error recording your vote. Please try again.');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -16,6 +16,11 @@ public class VoteService implements Voteserviceinter{
 
 	@Autowired
 	private VoteRepo repo;
+
+	public Object geetALl() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 
 	

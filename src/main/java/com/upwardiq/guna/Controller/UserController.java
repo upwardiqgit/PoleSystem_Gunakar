@@ -46,13 +46,13 @@ public class UserController {
     public ResponseEntity<Map<String, String>> registerUser(@ModelAttribute User user) {
         Map<String, String> response = new HashMap<>();
         try {
-            // Save the user (implement your saving logic here)
+           
             service.saveUser(user);
             response.put("status", "success");
         } catch (Exception e) {
             response.put("status", "failure");
         }
-        return ResponseEntity.ok(response);  // Return the response as JSON
+        return ResponseEntity.ok(response); 
     }
 
     @GetMapping("/getLoginpage")
@@ -66,7 +66,7 @@ public class UserController {
     	Optional<User> userOptional = service.checkUserDetailsByUseridandPassword(new LoginDto(userid, password));
         System.out.println("===========================================================================================");
         if (userOptional.isPresent()) {
-            session.setAttribute("isLoggedIn",true); // Corrected to true for logged-in state
+            session.setAttribute("isLoggedIn",true); 
             session.setAttribute("loggedInUserId", userOptional.get().getId());
             System.out.println("hi from if ");
             return "loggedIn";
@@ -80,7 +80,36 @@ public class UserController {
     	session.removeAttribute("isLoggedIn");
     	return "redirect:/";
     }
+    @GetMapping("/Polewindow")
+    public String getPoleWindow(HttpSession session, Model model) {
+       
+        Long userId = (Long) session.getAttribute("loggedInUserId");
+        System.out.println("00000000000000000000000000000000000000000000000000000000000000000000000000000000");
+        if (userId == null) {
+            return "redirect:/getLoginpage"; // Redirect to login if not logged in
+        }
 
+        
+        Optional<User> userOptional = service.findByUserid(userId);
+        if (userOptional.isEmpty()) {
+            return "redirect:/getLoginpage"; 
+        }
+
+        User user = userOptional.get();
+        System.out.println(user+"gunaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        model.addAttribute("hasVoted", user.isHasVoted());
+        model.addAttribute("allvotes", voteservice.geetALl());
+        return "Polewindow";
+    }
+
+    @GetMapping("/check-login-status")
+    @ResponseBody
+    public String checkLoginStatus(HttpSession session) {
+    	System.out.println("&&&&&&&&&&7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777");
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        System.out.println(isLoggedIn+"(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((");
+        return (isLoggedIn != null && isLoggedIn) ? "loggedIn" : "notLoggedIn";
+    }
    
 }
 
