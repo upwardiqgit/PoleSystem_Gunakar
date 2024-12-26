@@ -21,6 +21,11 @@ public class VoteService implements Voteserviceinter{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void recordVote(Long voteId) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 	

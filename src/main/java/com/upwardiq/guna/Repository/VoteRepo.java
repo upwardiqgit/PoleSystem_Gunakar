@@ -13,7 +13,8 @@ import com.upwardiq.guna.Entity.Vote;
 @Repository
 public interface VoteRepo extends JpaRepository<Vote,Long>{
 
-	
+	@Query("SELECT v.partname FROM Vote v")
+    List<String> findAllPartnames();
 
 	
 }
