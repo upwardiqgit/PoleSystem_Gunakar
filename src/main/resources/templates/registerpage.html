@@ -102,10 +102,23 @@
     <!-- Main Content with Sidebar and Right Content -->
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar Section -->
+           <!-- Sidebar Section  -->
             <div class="col-md-3">
-                <div th:insert="Sidenavbar.html::Sidenav"></div>
+            
+             <div class="d-flex">
+			         <div class="side-navbar">
+			         
+			            <a id="registerUser" href="register" class=" btn disabled-link">Register User</a>
+			        <a id="loginUser" href="getLoginpage" class=" btn disabled-link">Login User</a>
+			        <a id="pollWindow" href="/Polewindow" class=" btn disabled-link">Poll Window</a>
+			        <a id="viewResult" href="/getresult" class=" btn disabled-link">View Result</a>
+			            
+			        </div>
+         
+                </div>
             </div>
+            
+         
 
             <!-- Right Content Section -->
             <div class="col-md-9">
@@ -183,6 +196,38 @@
         });
     });
 </script>
+<script>
+        // Call the server to check login status
+        fetch('/checkLoginStatus')
+            .then(response => response.json())
+            .then(isLoggedIn => {
+                if (isLoggedIn) {
+                    // Enable Poll Window and View Result
+                    document.getElementById('pollWindow').classList.remove('disabled-link');
+                    document.getElementById('pollWindow').style.pointerEvents = 'auto';
+                    document.getElementById('viewResult').classList.remove('disabled-link');
+                    document.getElementById('viewResult').style.pointerEvents = 'auto';
 
+                    // Disable Register User and Login User
+                    document.getElementById('registerUser').classList.add('disabled-link');
+                    document.getElementById('registerUser').style.pointerEvents = 'none';
+                    document.getElementById('loginUser').classList.add('disabled-link');
+                    document.getElementById('loginUser').style.pointerEvents = 'none';
+                } else {
+                    // Enable Register User and Login User
+                    document.getElementById('registerUser').classList.remove('disabled-link');
+                    document.getElementById('registerUser').style.pointerEvents = 'auto';
+                    document.getElementById('loginUser').classList.remove('disabled-link');
+                    document.getElementById('loginUser').style.pointerEvents = 'auto';
+
+                    // Disable Poll Window and View Result
+                    document.getElementById('pollWindow').classList.add('disabled-link');
+                    document.getElementById('pollWindow').style.pointerEvents = 'none';
+                    document.getElementById('viewResult').classList.add('disabled-link');
+                    document.getElementById('viewResult').style.pointerEvents = 'none';
+                }
+            })
+            .catch(error => console.error('Error fetching login status:', error));
+    </script>
 </body>
 </html>

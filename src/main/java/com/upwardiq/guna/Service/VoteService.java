@@ -16,15 +16,16 @@ public class VoteService implements Voteserviceinter{
 
 	@Autowired
 	private VoteRepo repo;
-
+	@Override
 	public List<String> getAllNames() {
 		return repo.findAllPartnames();
 		
 	}
+	@Override
 	public List<Vote> geetALl(){
 		return repo.findAll();
 	}
-	
+	@Override
     public void recordVote(Long voteId) {
         // Add logic to save the vote
         Optional<Vote> voteOptional = repo.findById(voteId);

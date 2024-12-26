@@ -86,7 +86,7 @@ public class UserController {
         Long userId = (Long) session.getAttribute("loggedInUserId");
         System.out.println("00000000000000000000000000000000000000000000000000000000000000000000000000000000");
         if (userId == null) {
-            return "redirect:/getLoginpage"; // Redirect to login if not logged in
+            return "redirect:/getLoginpage"; 
         }
 
         
@@ -113,10 +113,10 @@ public class UserController {
     @GetMapping("/checkLoginStatus")
     @ResponseBody
     public boolean checkLoginStatusforbuttons(HttpSession session) {
-        // Retrieve the `isLoggedIn` status from session
+        
         Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
         System.out.println("----------------------"+isLoggedIn);
-        return Boolean.TRUE.equals(isLoggedIn); // Default to `false` if null
+        return Boolean.TRUE.equals(isLoggedIn); 
     }
 }
 

@@ -16,6 +16,15 @@
 	color: gray;
 	text-decoration: none;
 }
+ .btn {
+            margin: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            width: auto;
+            transition: background-color 0.3s, transform 0.2s;
+        }
 </style>
 </head>
 <body class="bg-light">
@@ -23,10 +32,21 @@
 
 	<div class="container-fluid min-vh-100">
 	<div class="row h-100">
-		<!-- Sidebar -->
-		<div class="col-md-4 bg-light p-3">
-			<div th:insert="Sidenavbar.html::Sidenav"></div>
-		</div>
+		<!-- Sidebar Section  -->
+            <div class="col-md-3">
+            
+             <div class="d-flex">
+			         <div class="side-navbar">
+			         
+			            <a id="registerUser" href="register" class=" btn disabled-link">Register User</a>
+			        <a id="loginUser" href="getLoginpage" class=" btn disabled-link">Login User</a>
+			        <a id="pollWindow" href="/Polewindow" class=" btn disabled-link">Poll Window</a>
+			        <a id="viewResult" href="/getresult" class=" btn disabled-link">View Result</a>
+			            
+			        </div>
+         
+                </div>
+            </div>
 		<!-- Login Form -->
 		<div class="col-md-8 d-flex  align-items-center">
 			<div class="card shadow-lg p-4" style="width: 22rem; border-radius: 10px;">
@@ -42,9 +62,8 @@
 						<input type="password" class="form-control" id="password" name="password"
 							placeholder="Enter Password" required>
 					</div>
-					<div class="d-grid gap-2">
+					<div class="d-grid">
 						<button type="button" class="btn btn-primary" id="loginButton">Login</button>
-						<button type="button" class="btn btn-secondary" id="clearButton">Clear</button>
 					</div>
 				</form>
 				<div id="errorMsg" class="mt-3 text-danger text-center" style="display: none;">Invalid credentials!</div>
@@ -80,6 +99,7 @@
           success: function (response) {
             if (response === 'loggedIn') {
               localStorage.setItem('loggedIn', 'true');  // Store logged-in state in localStorage
+              console.log("---------------------------------------------------------------------")
               window.location.href = '/home'; // Redirect to home page
               $('#errorMsg').hide(); // Hide the error message if shown
             } else {
@@ -92,11 +112,6 @@
         });
     });
 
-    $('#clearButton').click(function () {
-      $('#loginForm')[0].reset(); // Clear all form fields
-      $('#errorMsg').hide(); // Hide the error message if shown
-    });
-
     function showError(message) {
       const errorMsg = $('#errorMsg');
       errorMsg.text(message);
@@ -104,5 +119,38 @@
     }
   });
 </script>
+ <script>
+        // Call the server to check login status
+        fetch('/checkLoginStatus')
+            .then(response => response.json())
+            .then(isLoggedIn => {
+                if (isLoggedIn) {
+                    // Enable Poll Window and View Result
+                    document.getElementById('pollWindow').classList.remove('disabled-link');
+                    document.getElementById('pollWindow').style.pointerEvents = 'auto';
+                    document.getElementById('viewResult').classList.remove('disabled-link');
+                    document.getElementById('viewResult').style.pointerEvents = 'auto';
+
+                    // Disable Register User and Login User
+                    document.getElementById('registerUser').classList.add('disabled-link');
+                    document.getElementById('registerUser').style.pointerEvents = 'none';
+                    document.getElementById('loginUser').classList.add('disabled-link');
+                    document.getElementById('loginUser').style.pointerEvents = 'none';
+                } else {
+                    // Enable Register User and Login User
+                    document.getElementById('registerUser').classList.remove('disabled-link');
+                    document.getElementById('registerUser').style.pointerEvents = 'auto';
+                    document.getElementById('loginUser').classList.remove('disabled-link');
+                    document.getElementById('loginUser').style.pointerEvents = 'auto';
+
+                    // Disable Poll Window and View Result
+                    document.getElementById('pollWindow').classList.add('disabled-link');
+                    document.getElementById('pollWindow').style.pointerEvents = 'none';
+                    document.getElementById('viewResult').classList.add('disabled-link');
+                    document.getElementById('viewResult').style.pointerEvents = 'none';
+                }
+            })
+            .catch(error => console.error('Error fetching login status:', error));
+    </script>
 </body>
 </html>
