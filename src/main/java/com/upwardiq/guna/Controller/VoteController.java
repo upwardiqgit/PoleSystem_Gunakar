@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,6 +58,11 @@ public class VoteController {
 	        e.printStackTrace();
 	        return "error";
 	    }
+	}
+	@GetMapping("/getresult")
+	public String getAllvotesdetails(Model model) {
+		model.addAttribute("resiltvotes", voteService.geetALl());
+		return "viewresult";
 	}
 
 }

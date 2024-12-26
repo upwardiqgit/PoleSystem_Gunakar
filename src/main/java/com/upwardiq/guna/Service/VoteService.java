@@ -17,16 +17,25 @@ public class VoteService implements Voteserviceinter{
 	@Autowired
 	private VoteRepo repo;
 
-	public Object geetALl() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void recordVote(Long voteId) {
-		// TODO Auto-generated method stub
+	public List<String> getAllNames() {
+		return repo.findAllPartnames();
 		
 	}
+	public List<Vote> geetALl(){
+		return repo.findAll();
+	}
 	
+    public void recordVote(Long voteId) {
+        // Add logic to save the vote
+        Optional<Vote> voteOptional = repo.findById(voteId);
+        if (voteOptional.isPresent()) {
+            Vote vote = voteOptional.get();
+            vote.setCount(vote.getCount() + 1); // Increment the vote count
+            repo.save(vote);
+        } else {
+            throw new RuntimeException("Vote ID not found");
+        }
+    }
 
 	
 
