@@ -110,6 +110,13 @@ public class UserController {
         System.out.println(isLoggedIn+"(((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((");
         return (isLoggedIn != null && isLoggedIn) ? "loggedIn" : "notLoggedIn";
     }
-   
+    @GetMapping("/checkLoginStatus")
+    @ResponseBody
+    public boolean checkLoginStatusforbuttons(HttpSession session) {
+        // Retrieve the `isLoggedIn` status from session
+        Boolean isLoggedIn = (Boolean) session.getAttribute("isLoggedIn");
+        System.out.println("----------------------"+isLoggedIn);
+        return Boolean.TRUE.equals(isLoggedIn); // Default to `false` if null
+    }
 }
 
