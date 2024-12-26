@@ -42,8 +42,9 @@
 						<input type="password" class="form-control" id="password" name="password"
 							placeholder="Enter Password" required>
 					</div>
-					<div class="d-grid">
+					<div class="d-grid gap-2">
 						<button type="button" class="btn btn-primary" id="loginButton">Login</button>
+						<button type="button" class="btn btn-secondary" id="clearButton">Clear</button>
 					</div>
 				</form>
 				<div id="errorMsg" class="mt-3 text-danger text-center" style="display: none;">Invalid credentials!</div>
@@ -79,7 +80,6 @@
           success: function (response) {
             if (response === 'loggedIn') {
               localStorage.setItem('loggedIn', 'true');  // Store logged-in state in localStorage
-              console.log("---------------------------------------------------------------------")
               window.location.href = '/home'; // Redirect to home page
               $('#errorMsg').hide(); // Hide the error message if shown
             } else {
@@ -90,6 +90,11 @@
             showError('An error occurred. Please try again later.');
           }
         });
+    });
+
+    $('#clearButton').click(function () {
+      $('#loginForm')[0].reset(); // Clear all form fields
+      $('#errorMsg').hide(); // Hide the error message if shown
     });
 
     function showError(message) {
